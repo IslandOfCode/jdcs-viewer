@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<ipcamdata>
+	<model>DCS-5009L</model>
+	<version>1.0</version>
+	<author>Pier Riccardo Monzo</author>
+	
+	<video>
+		<URLstream>http://%IP%/mjpeg.cgi</URLstream>
+		<URLimage>http://%IP%/image.jpg</URLimage>
+	</video>
+	
+	<audio>
+		<!-- Funziona (nel senso che è effettivamente un flusso audio) ma nemmeno VLC riesce ad eseguirlo. 
+		Sostituire "dgaudio" con "audio" permette un flusso tramite VLC, ma con 7/8 secondi di ritardo -->
+		<URLstream>http://%IP%/audio.cgi</URLstream>
+	</audio>
+	
+	<panning>
+		<pannable>true</pannable>
+		<!-- Pan è SX/DX, mentre Tilt è UP/DOWN
+			Metto ad entrambi %DEGREE%, ma si potrebbero usare gradi differenti,
+			come d'altra parte fa la GUI WEB -->
+		<URLpanUp>http://%IP%/pantiltcontrol.cgi?PanSingleMoveDegree=%DEGREE%&amp;TiltSingleMoveDegree=%DEGREE%&amp;PanTiltSingleMove=1</URLpanUp>
+		<URLpanDown>http://%IP%/pantiltcontrol.cgi?PanSingleMoveDegree=%DEGREE%&amp;TiltSingleMoveDegree=%DEGREE%&amp;PanTiltSingleMove=7</URLpanDown>
+		<URLpanLeft>http://%IP%/pantiltcontrol.cgi?PanSingleMoveDegree=%DEGREE%&amp;TiltSingleMoveDegree=%DEGREE%&amp;PanTiltSingleMove=3</URLpanLeft>
+		<URLpanRight>http://%IP%/pantiltcontrol.cgi?PanSingleMoveDegree=%DEGREE%&amp;TiltSingleMoveDegree=%DEGREE%&amp;PanTiltSingleMove=5</URLpanRight>
+		
+		<URLpreset>http://%IP%/pantiltcontrol.cgi?PanTiltPresetPositionMove=%PRESET%</URLpreset>
+	</panning>
+	
+	<command>
+		<NVtogglable>true</NVtogglable>
+		<URLNVon>http://%IP%/daynight.cgi?DayNightMode=3&amp;ConfigReboot=no</URLNVon>
+		<URLNVoff>http://%IP%/daynight.cgi?DayNightMode=2&amp;ConfigReboot=no</URLNVoff>
+		<URLNVauto>http://%IP%/daynight.cgi?DayNightMode=0&amp;ConfigReboot=no</URLNVauto>
+		
+		<MotionTogglable>true</MotionTogglable>
+		<URLmotionOn>http://%IP%/motion.cgi?MotionDetectionEnable=1&amp;ConfigReboot=no</URLmotionOn>
+		<URLmotionOff>http://%IP%/motion.cgi?MotionDetectionEnable=0&amp;ConfigReboot=no</URLmotionOff>
+	</command>
+	
+</ipcamdata>

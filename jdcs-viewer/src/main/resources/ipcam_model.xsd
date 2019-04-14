@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!-- 
+	Parole chive negli URL:
+	1) %IP%: indirizzo ip o URL (in questo caso ricordarsi di non inserire http-s:// in configurazione
+	2) %DEGREE%: indica di quanti gradi ci si deve muovere (intero, 5-10-15-20-25)
+	3) %PRESET%: indica quale preset bisogna caricare (intero, 0-4)
+ -->
+
+	<xs:element name="ipcamdata">
+		<xs:complexType>
+			<xs:sequence>
+
+				<xs:element name="model" type="xs:string" />
+				<xs:element name="version" type="xs:string" />
+				<xs:element name="author" type="xs:string" />
+
+				<xs:element name="video">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="URLstream" type="xs:string" minOccurs="1" maxOccurs="1" />
+							<xs:element name="URLimage" type="xs:string" minOccurs="0" maxOccurs="1" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="audio">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="URLstream" type="xs:string" minOccurs="0" maxOccurs="1" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="panning">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="pannable" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+							
+							<xs:element name="URLpanUp" type="xs:string" minOccurs="0" maxOccurs="1" />
+							<xs:element name="URLpanDown" type="xs:string" minOccurs="0" maxOccurs="1" />
+							<xs:element name="URLpanLeft" type="xs:string" minOccurs="0" maxOccurs="1" />
+							<xs:element name="URLpanRight" type="xs:string" minOccurs="0" maxOccurs="1" />
+							
+							<xs:element name="URLpreset" type="xs:string" minOccurs="0" maxOccurs="1" />					
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="command">
+					<xs:complexType>
+						<xs:sequence>
+						
+							<xs:element name="NVtogglable" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+							<xs:element name="URLNVon" type="xs:string" minOccurs="0" maxOccurs="1" />
+							<xs:element name="URLNVoff" type="xs:string" minOccurs="0" maxOccurs="1" />
+							<xs:element name="URLNVauto" type="xs:string" minOccurs="0" maxOccurs="1" />
+							
+							<xs:element name="MotionTogglable" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+							<xs:element name="URLmotionOn" type="xs:string" minOccurs="0" maxOccurs="1" />
+							<xs:element name="URLmotionOff" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<!-- https://www.w3schools.com/xml/schema_example.asp -->
+
+</xs:schema> 
