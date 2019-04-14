@@ -113,6 +113,8 @@ public class Viewer {
 	private IpCamDevice ICD;
 	private AudioPlayer AUP = null;
 	private JMenuItem DBG_testSettings;
+	private JMenu mnDebug;
+	private JSeparator separator_1;
 
 	/**
 	 * Launch the application.
@@ -166,37 +168,6 @@ public class Viewer {
 					connect();
 			}
 		});
-		
-		DBG_testSettings = new JMenuItem("[DBG] test settings");
-		DBG_testSettings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				File config = new File(SettingsUI.PROP_FILE_NAME);
-				
-				if(!config.exists()) {
-					JOptionPane.showMessageDialog(null, "<html>No configuration file found.<br/>"
-							+ "Please use the <b>Connection/Configuration</b> menu to create the file.<br/>"
-							+ "If the problem persist, restart the application.", "Warning!",
-							JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-				
-				settings = null;
-				try {
-					settings = new Settings();
-				} catch (InconsistentSettingException e1) {
-					JOptionPane.showMessageDialog(null, "<html>Problem with configuration file.<br/>"
-							+ "Plese check the configuration file and the model file.", "Error!",
-							JOptionPane.ERROR_MESSAGE);
-					// TODO per debug, ma poi rimuovere
-					e1.printStackTrace();
-					return;
-				}
-				
-				JOptionPane.showMessageDialog(null, "ALL GOOD!", "Test settings",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
-		mnConnessione.add(DBG_testSettings);
 		mnConnessione.add(M_connect);
 		
 		JMenuItem M_settings = new JMenuItem("Configuration");
@@ -281,9 +252,54 @@ public class Viewer {
 		mnHelp.add(M_update);
 		
 		JMenuItem M_help = new JMenuItem("About");
+		M_help.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				(new About()).setVisible(true);
+			}
+		});
 		M_help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		M_help.setIcon(new ImageIcon(Viewer.class.getResource("/icons/about.png")));
 		mnHelp.add(M_help);
+		
+		separator_1 = new JSeparator();
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		menuBar.add(separator_1);
+		
+		mnDebug = new JMenu("Debug");
+		mnDebug.setForeground(Color.RED);
+		menuBar.add(mnDebug);
+		
+		DBG_testSettings = new JMenuItem("Test settings");
+		mnDebug.add(DBG_testSettings);
+		DBG_testSettings.setIcon(new ImageIcon(Viewer.class.getResource("/icons/bug.png")));
+		DBG_testSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File config = new File(SettingsUI.PROP_FILE_NAME);
+				
+				if(!config.exists()) {
+					JOptionPane.showMessageDialog(null, "<html>No configuration file found.<br/>"
+							+ "Please use the <b>Connection/Configuration</b> menu to create the file.<br/>"
+							+ "If the problem persist, restart the application.", "Warning!",
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				
+				settings = null;
+				try {
+					settings = new Settings();
+				} catch (InconsistentSettingException e1) {
+					JOptionPane.showMessageDialog(null, "<html>Problem with configuration file.<br/>"
+							+ "Plese check the configuration file and the model file.", "Error!",
+							JOptionPane.ERROR_MESSAGE);
+					// TODO per debug, ma poi rimuovere
+					e1.printStackTrace();
+					return;
+				}
+				
+				JOptionPane.showMessageDialog(null, "ALL GOOD!", "Test settings",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		frmJdcsviewer.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		P_webcam = new JPanel();
@@ -351,7 +367,7 @@ public class Viewer {
 		P_degree.setLayout(new BorderLayout(0, 0));
 		
 		CB_degree = new JComboBox<String>();
-		CB_degree.setModel(new DefaultComboBoxModel<String>(new String[] {"5", "10", "15", "20", "25"}));
+		CB_degree.setModel(new DefaultComboBoxModel<String>(new String[] {"5", "10", "15", "20", "25", "30"}));
 		P_degree.add(CB_degree, BorderLayout.CENTER);
 		
 		P_default = new JPanel();
@@ -360,12 +376,20 @@ public class Viewer {
 		P_default.setLayout(new BorderLayout(0, 0));
 		
 		CB_location = new JComboBox<String>();
-		CB_location.setEnabled(false);
 		CB_location.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
-					String item = (String) e.getItem();
-					System.out.println("NEW LOCATION: " + item);
+					String index = ((String) e.getItem()).replace("Loc", "");
+					System.out.println("NEW LOCATION: " + index );
+					
+					HttpUtils HU = new HttpUtils(settings.getIP(), new IpCamAuth(settings.getUsername(), settings.getPassword()));
+					if (ICD.isOnline()) {
+						try {
+							HU.get(HttpUtils.toURI(HttpUtils.toURL( settings.getURLpreset(index) )));
+						} catch (UnsupportedOperationException | IOException ex) {
+							ex.printStackTrace();
+						}
+					}
 				}
 			}
 		});
