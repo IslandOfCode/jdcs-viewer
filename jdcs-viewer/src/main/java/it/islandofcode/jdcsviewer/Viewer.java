@@ -212,11 +212,12 @@ public class Viewer {
 					Notification.showIconNotification("Recording...", "", Notification.ICON_RECORD_START);
 					recordCls = new VideoRecording(Webcam.getWebcams().get(0), Webcam.getWebcams().get(0).getFPS());
 					recordThr = new Thread(recordCls, "recording-thread");
-					recordThr.setDaemon(true);
+					//recordThr.setDaemon(true); //removed because will continue to work ad other reason.
 					recordThr.start();
 				} else {
 					Webcam.getWebcams().get(0).setImageTransformer(null);
-					recordThr.interrupt();
+					recordCls.shutdown();
+					//recordThr.interrupt(); //nope: the file will be corrupted.
 					//while(!recordThr.isInterrupted()) {	} //make the gui hang, it's a no-no-nope
 					Notification.showIconNotification("Stop recording.", recordCls.getPath(), Notification.ICON_RECORD_STOP);
 					recordThr = null;
@@ -492,7 +493,7 @@ public class Viewer {
 						});
 						
 						aupThr = new Thread(AUP, "audio-stream-thread");
-						aupThr.setDaemon(true);
+						//aupThr.setDaemon(true);
 						aupThr.start();
 						
 						//AUP.run();
