@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class About extends JDialog {
 
@@ -30,7 +31,8 @@ public class About extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
-		JLabel Description = new JLabel("<html>\r\n<div style=\"padding:20px; font-size:14pt; text-align:center\">\r\n\t<p>A simple ipcam viewer, focused on the DCS-xxxx series of D-Link brand.</p>\r\n\t<br/>\r\n\t<i>Author:</i> <strong>Pier Riccardo Monzo</strong>\r\n</div>");
+		JLabel Description = new JLabel("<html>\r\n<div style=\"padding:20px; font-size:14pt; text-align:center\">\r\n\t<p>A simple ipcam viewer, focused on the DCS-xxxx series of D-Link brand.</p>\r\n\t<br/>\r\n\t<i>Author:</i> <strong>Pier Riccardo Monzo</strong>\r\n\t<br/>\r\n\t<i>Website:</i> <strong>www.islandofcode.it</strong>\r\n</div>");
+		Description.setFont(new Font("Dialog", Font.PLAIN, 12));
 		Description.setBounds(10, 115, 318, 111);
 		getContentPane().add(Description);
 		

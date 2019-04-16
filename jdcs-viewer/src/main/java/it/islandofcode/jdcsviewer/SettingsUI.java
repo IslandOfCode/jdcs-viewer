@@ -8,8 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -141,13 +141,15 @@ public class SettingsUI extends JDialog {
 	private void loadModelList() {
 		//System.out.println("INTERNAL MODEL FOLDER:");
 		ArrayList<String> L = new ArrayList<>();
-		int i = 1;
+		//int i = 1;
 		L.add(0,"");
-		for(File F : getResourceFolderFiles("default_model")) {
+		/*for(File F : getResourceFolderFiles("default_model")) {
 			//System.out.println("\t"+F.getName());
 			L.add(i, F.getName().replace(".xml", ""));
 			i++;
-		}
+		}*/
+		//leggo i nomi dei file interni e li aggiungo alla lista
+		L.addAll(getResourceFolderFiles());
 		//aggiungo alla lista i file esterni, se esistono.
 		L.addAll(getExternalModelList());
 		
@@ -299,11 +301,42 @@ public class SettingsUI extends JDialog {
 		}
 	}
 	
-	
+	/* 
+	//Non posso usare questo perchè non possono enumerare una cartella dentro un file JAR
 	private static File[] getResourceFolderFiles(String folder) {
 	    ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	    URL url = loader.getResource(folder);
 	    String path = url.getPath();
 	    return new File(path).listFiles();
-	  }
+	}*/
+	
+	private static ArrayList<String> getResourceFolderFiles(){
+		ArrayList<String> list = new ArrayList<>();
+		
+		InputStream is = SettingsUI.class.getResourceAsStream("/default_model/LIST");
+		
+		String FN = "";
+		char C;
+		int R;
+		try {
+			while( (R = is.read()) != -1 ) {
+				C = (char) R;
+				if(C == '\n' || C == '\r') {
+					if(!FN.isEmpty()) { //ho una riga piena
+						list.add(FN);
+					}
+					//ho un ritorno a capo singolo
+					FN = "";
+					continue;
+				}
+				FN += C;
+			}
+			if(!FN.isEmpty())
+				list.add(FN);
+		} catch (IOException e) {
+			return list;
+		}
+		
+		return list;
+	}
 }

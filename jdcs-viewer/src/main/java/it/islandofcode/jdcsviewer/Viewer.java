@@ -56,6 +56,7 @@ import it.islandofcode.jdcsviewer.utils.Notification;
 import it.islandofcode.jdcsviewer.utils.RecordIconTransformer;
 import it.islandofcode.jdcsviewer.utils.ScreenShoot;
 import it.islandofcode.jdcsviewer.utils.VideoRecording;
+import javax.swing.JCheckBoxMenuItem;
 
 
 public class Viewer {
@@ -115,6 +116,10 @@ public class Viewer {
 	private JMenuItem DBG_testSettings;
 	private JMenu mnDebug;
 	private JSeparator separator_1;
+	private JMenu mnExtra;
+	private JCheckBoxMenuItem CBM_movedet;
+	private JCheckBoxMenuItem CBM_facedet;
+	private JMenuItem DBG_repaintControlPanel;
 
 	/**
 	 * Launch the application.
@@ -244,6 +249,18 @@ public class Viewer {
 		});
 		mnCattura.add(M_screenshot);
 		
+		mnExtra = new JMenu("Extra");
+		mnExtra.setEnabled(false);
+		menuBar.add(mnExtra);
+		
+		CBM_movedet = new JCheckBoxMenuItem("Movement Detection");
+		CBM_movedet.setIcon(new ImageIcon(Viewer.class.getResource("/icons/run.png")));
+		mnExtra.add(CBM_movedet);
+		
+		CBM_facedet = new JCheckBoxMenuItem("Face Detection");
+		CBM_facedet.setIcon(new ImageIcon(Viewer.class.getResource("/icons/face.png")));
+		mnExtra.add(CBM_facedet);
+		
 		JMenu mnHelp = new JMenu("?");
 		menuBar.add(mnHelp);
 		
@@ -273,6 +290,17 @@ public class Viewer {
 		DBG_testSettings = new JMenuItem("Test settings");
 		mnDebug.add(DBG_testSettings);
 		DBG_testSettings.setIcon(new ImageIcon(Viewer.class.getResource("/icons/bug.png")));
+		
+		DBG_repaintControlPanel = new JMenuItem("Repaint Control Panel");
+		DBG_repaintControlPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.err.println("[DBG] Forced repaint event on Control Panel!");
+				if(P_control.isVisible())
+					P_control.repaint();
+			}
+		});
+		DBG_repaintControlPanel.setIcon(new ImageIcon(Viewer.class.getResource("/icons/bug.png")));
+		mnDebug.add(DBG_repaintControlPanel);
 		DBG_testSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File config = new File(SettingsUI.PROP_FILE_NAME);
